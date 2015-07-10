@@ -1,0 +1,2 @@
+# wittekm.zshrc
+zshrc settings
