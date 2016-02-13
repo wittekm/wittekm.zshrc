@@ -7,9 +7,17 @@ antigenSettings()
     antigen bundle zsh-users/zsh-syntax-highlighting
     antigen bundle git
     antigen bundle history
+    antigen bundle zsh-users/zsh-completions src
     antigen theme robbyrussell/oh-my-zsh themes/apple
+    
+    if [[ $CURRENT_OS == 'OS X' ]]; then
+        antigen bundle brew
+        antigen bundle brew-cask
+        antigen bundle osx
+    fi
 }
 antigenSettings
+
 
 historySettings()
 {
@@ -23,11 +31,29 @@ historySettings()
 }
 historySettings
 
+
+gitSettings()
+{
+    autoload -Uz compinit && compinit
+}
+gitSettings
+
+
 shellSettings()
 {
     alias ls='ls -G'
+    bindkey '^A' beginning-of-line
+    bindkey '^E' end-of-line
 }
 shellSettings
+
+
+generalAliases()
+{
+    alias gvim='mvim' # macvim
+}
+generalAliases
+
 
 dropboxSpecificSettings()
 {
@@ -40,15 +66,34 @@ dropboxSpecificSettings()
 
     alias ba='ssh -A bastion.dropboxer.net'
 
-    alias cs="~/src/server/codesearch/codesearch_cli.py"
-}
+    #preisntalled w puppet
+    #alias cs="~/src/server/codesearch/codesearch_cli.py"
+    
+    # Dropbox API REPL - https://sites.google.com/a/dropbox.com/api-team/api-v2
+    alias dbrepl="~/src/dropbox-api-v2-repl/repl.sh"
 
-generalAliases()
-{
-    alias gvim='mvim' # macvim
-}
-generalAliases
+    function typy() {
+      # typecheck your python through dark magic [mypy]
+      cd ~/src/server
+      ./ci/mypy-run
+    }
 
+    function lint() {
+      cd ~/src/server
+      typy()
+      arc lint
+    }
+    
+    # https://paper.dropbox.com/doc/Paper-VM-VagrantChef-FAQ-3ZnBbjYMwjk
+    function cd() {
+      builtin cd "$@"
+      if [[ $PWD =~ $HOME/src/composer ]]; then
+        export VAGRANT_HOME=$HOME/src/composer/.vagrant
+      else
+        unset VAGRANT_HOME
+      fi
+    }
+}
 case "$HOST" in
     *dropbox.com*) 
         dropboxSpecificSettings
