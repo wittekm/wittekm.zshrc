@@ -1,5 +1,6 @@
 export EDITOR="vim"
 export VISUAL="vim"
+export WITTEKM_ZSHRC_PATH="/Users/$USER/etc/wittekm.zshrc/wittekm.zshrc"
 
 antigenSettings()
 {
@@ -41,6 +42,7 @@ gitSettings
 
 shellSettings()
 {
+    alias ezshrc='gvim -f $WITTEKM_ZSHRC_PATH; source $WITTEKM_ZSHRC_PATH'
     alias ls='ls -G'
     bindkey '^A' beginning-of-line
     bindkey '^E' end-of-line
@@ -60,28 +62,32 @@ dropboxSpecificSettings()
     echo "Dropbox MBP"
 
     alias ss='cd ~/src/server'
-    alias vssh='ssh dbdev'
-    alias v='ss && vagrant'
-    alias vs='ss && vssh'
+    
+    #alias vssh='ssh dbdev'
+    #alias v='ss && vagrant'
+    #alias vs='ss && vssh'
+    alias vs='ssh ec-server'
+    alias fw='ec stop fw_rsyncer && ec start fw_rsyncer'
+    alias vup='ec start server'
+    alias vdown='ec stop server'
 
     alias ba='ssh -A bastion.dropboxer.net'
 
-    #preisntalled w puppet
-    #alias cs="~/src/server/codesearch/codesearch_cli.py"
-    
     # Dropbox API REPL - https://sites.google.com/a/dropbox.com/api-team/api-v2
     alias dbrepl="~/src/dropbox-api-v2-repl/repl.sh"
 
+    alias babelgen="vs -- 'cd /srv/nfs-server && api/generator/run-babel-codegen'"
+
     function typy() {
       # typecheck your python through dark magic [mypy]
-      cd ~/src/server
-      ./ci/mypy-run
+      cd ~/src/server;
+      ./ci/mypy-run;
     }
 
     function lint() {
-      cd ~/src/server
-      typy()
-      arc lint
+      cd ~/src/server;
+      typy;
+      arc lint;
     }
     
     # https://paper.dropbox.com/doc/Paper-VM-VagrantChef-FAQ-3ZnBbjYMwjk
@@ -95,7 +101,7 @@ dropboxSpecificSettings()
     }
 }
 case "$HOST" in
-    *dropbox.com*) 
+    *wimax-loaner*) 
         dropboxSpecificSettings
     ;;
     *) 
