@@ -81,7 +81,7 @@ dropboxSpecificSettings()
     function typy() {
       # typecheck your python through dark magic [mypy]
       cd ~/src/server;
-      ./ci/mypy-run;
+      ./ci/mypy-run $@;
     }
 
     function lint() {
@@ -90,8 +90,14 @@ dropboxSpecificSettings()
       arc lint;
     }
     
+    function selen() {
+      ss;
+      cd selenium-tests;
+      ./selenium/bin/py.test $@
+    }
+    
     # https://paper.dropbox.com/doc/Paper-VM-VagrantChef-FAQ-3ZnBbjYMwjk
-    function cd() {
+    function cd__DEPRECATED_WITH_EC() {
       builtin cd "$@"
       if [[ $PWD =~ $HOME/src/composer ]]; then
         export VAGRANT_HOME=$HOME/src/composer/.vagrant
