@@ -1,6 +1,7 @@
 export EDITOR="vim"
 export VISUAL="vim"
-export WITTEKM_ZSHRC_PATH="/Users/$USER/etc/wittekm.zshrc/wittekm.zshrc"
+export WITTEKM_ZSHRC_DIR="/Users/$USER/etc/wittekm.zshrc/"
+export WITTEKM_ZSHRC_PATH="$WITTEKM_ZSHRC_DIR/wittekm.zshrc"
 
 antigenSettings()
 {
@@ -53,6 +54,7 @@ shellSettings
 generalAliases()
 {
     alias gvim='mvim' # macvim
+    alias osx_notify='python $WITTEKM_ZSHRC_DIR/osx_notify.py $@'
 }
 generalAliases
 
@@ -76,7 +78,7 @@ dropboxSpecificSettings()
     # Dropbox API REPL - https://sites.google.com/a/dropbox.com/api-team/api-v2
     alias dbrepl="~/src/dropbox-api-v2-repl/repl.sh"
 
-    alias babelgen="vs -- 'cd /srv/nfs-server && api/generator/run-babel-codegen'"
+    alias babelgen="vs -- 'cd /srv/nfs-server && api/generator/run-babel-codegen $@'"
 
     function typy() {
       # typecheck your python through dark magic [mypy]
