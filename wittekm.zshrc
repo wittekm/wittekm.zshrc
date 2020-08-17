@@ -4,6 +4,12 @@ export WITTEKM_ZSHRC_DIR="/Users/$USER/etc/wittekm.zshrc/"
 export WITTEKM_ZSHRC_PATH="$WITTEKM_ZSHRC_DIR/wittekm.zshrc"
 export PYCHARM=/Users/wimax/Library/Application\ Support/JetBrains/Toolbox/apps/PyCharm-P/ch-1/171.3780.115/PyCharm\ 2017.1\ EAP.app 
 
+source $WITTEKM_ZSHRC_DIR/iterm2_shell_integration.zsh
+# alias it2git='$WITTEKM_ZSHRC_DIR/it2git.sh'
+# iterm2_print_user_vars() {
+#  it2git
+# }
+
 antigenSettings()
 {
     source "$HOME/.antigen/antigen.zsh"
@@ -21,7 +27,7 @@ antigenSettings()
     fi
     antigen apply
 }
-antigenSettings
+#antigenSettings
 
 
 historySettings()
@@ -56,7 +62,7 @@ shellSettings
 
 generalAliases()
 {
-    alias gvim='mvim' # macvim
+    alias gvim='open -a MacVim $@'
     alias osx_notify='python $WITTEKM_ZSHRC_DIR/osx_notify.py $@'
 
     #cd into directory containing
@@ -68,15 +74,21 @@ devboxHelpers()
 {
     DEVBOX_HOST=$USER-dbx
     SOURCE_ROOT_ON_DEVBOX='~/src/server-mirror'
+    function bzl() {
+        mbzl --use-fsnotify $@
+    }
+    # alias bzl=mbzl  # i am a bad person
+    alias bis="mbzl itest-stop-all --force"
+    alias bir="mbzl itest-reload-current"
 
     function d() {
         ssh $DEVBOX_HOST -t -- "cd $SOURCE_ROOT_ON_DEVBOX && echo \$PWD && $@"
     }
     
-    function mbd() {
-        TARGET=$1
-        KEYWORD=$2
-        mbzl develop $TARGET --test_arg="-k $KEYWORD"
+    function md() {
+      # mypy-daemon 2 and 3
+      /usr/local/engtools/common/bin/mypy-daemon
+      /usr/local/engtools/common/bin/mypy-daemon -3
     }
 }
 devboxHelpers
@@ -86,21 +98,18 @@ dropboxSpecificSettings()
     echo "Dropbox MBP"
 
     alias ss='cd ~/src/server'
+    alias sc='cd ~/src/client'
+    alias gm='cd ~/src/github/GmailIntegrationPrototype'
     
-    # Disenchanted with EC
-    alias vs='ssh ec-server'
-    alias fw='ec stop fw_rsyncer && ec start fw_rsyncer'
-    alias vup='ec start server'
-    alias vdown='ec stop server'
-
     # Dropbox API REPL - https://sites.google.com/a/dropbox.com/api-team/api-v2
     alias dbrepl="~/src/dropbox-api-v2-repl/repl.sh"
 
     function mypy-venv() {
-        ~/src/server/.mypy/venv/bin/mypy --fast-parser $@
+        ~/src/server/.mypy/venv/bin/mypy $@
     }
 
 
+    alias disk="ssh $USER-dbx -- df -h | grep /home | awk '{print $5}'"
     function typy() {
       # typecheck your python through dark magic [mypy]
       cd ~/src/server;
