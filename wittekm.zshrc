@@ -4,6 +4,7 @@ export WITTEKM_ZSHRC_DIR="/Users/$USER/etc/wittekm.zshrc/"
 export WITTEKM_ZSHRC_PATH="$WITTEKM_ZSHRC_DIR/wittekm.zshrc"
 export PYCHARM=/Users/wimax/Library/Application\ Support/JetBrains/Toolbox/apps/PyCharm-P/ch-1/171.3780.115/PyCharm\ 2017.1\ EAP.app 
 
+source "${WITTEKM_ZSHRC_DIR}/datadog.zshrc"
 source $WITTEKM_ZSHRC_DIR/iterm2_shell_integration.zsh
 # alias it2git='$WITTEKM_ZSHRC_DIR/it2git.sh'
 # iterm2_print_user_vars() {
@@ -74,12 +75,6 @@ devboxHelpers()
 {
     DEVBOX_HOST=$USER-dbx
     SOURCE_ROOT_ON_DEVBOX='~/src/server-mirror'
-    function bzl() {
-        mbzl --use-fsnotify $@
-    }
-    # alias bzl=mbzl  # i am a bad person
-    alias bis="mbzl itest-stop-all --force"
-    alias bir="mbzl itest-reload-current"
 
     function d() {
         ssh $DEVBOX_HOST -t -- "cd $SOURCE_ROOT_ON_DEVBOX && echo \$PWD && $@"
@@ -155,3 +150,5 @@ case "$HOST" in
         # default
     ;;
 esac
+
+export PATH="${PATH}:${WITTEKM_ZSHRC_DIR}/bin"
