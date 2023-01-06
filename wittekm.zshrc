@@ -2,14 +2,6 @@ export EDITOR="vim"
 export VISUAL="vim"
 export WITTEKM_ZSHRC_DIR="/Users/$USER/etc/wittekm.zshrc/"
 export WITTEKM_ZSHRC_PATH="$WITTEKM_ZSHRC_DIR/wittekm.zshrc"
-export PYCHARM=/Users/wimax/Library/Application\ Support/JetBrains/Toolbox/apps/PyCharm-P/ch-1/171.3780.115/PyCharm\ 2017.1\ EAP.app 
-
-source "${WITTEKM_ZSHRC_DIR}/datadog.zshrc"
-source $WITTEKM_ZSHRC_DIR/iterm2_shell_integration.zsh
-# alias it2git='$WITTEKM_ZSHRC_DIR/it2git.sh'
-# iterm2_print_user_vars() {
-#  it2git
-# }
 
 antigenSettings()
 {
@@ -71,80 +63,10 @@ generalAliases()
 }
 generalAliases
 
-devboxHelpers()
-{
-    DEVBOX_HOST=$USER-dbx
-    SOURCE_ROOT_ON_DEVBOX='~/src/server-mirror'
 
-    function d() {
-        ssh $DEVBOX_HOST -t -- "cd $SOURCE_ROOT_ON_DEVBOX && echo \$PWD && $@"
-    }
-    
-    function md() {
-      # mypy-daemon 2 and 3
-      /usr/local/engtools/common/bin/mypy-daemon
-      /usr/local/engtools/common/bin/mypy-daemon -3
-    }
-}
-devboxHelpers
-
-dropboxSpecificSettings()
-{
-    echo "Dropbox MBP"
-
-    alias ss='cd ~/src/server'
-    alias sc='cd ~/src/client'
-    alias gm='cd ~/src/github/GmailIntegrationPrototype'
-    
-    # Dropbox API REPL - https://sites.google.com/a/dropbox.com/api-team/api-v2
-    alias dbrepl="~/src/dropbox-api-v2-repl/repl.sh"
-
-    function mypy-venv() {
-        ~/src/server/.mypy/venv/bin/mypy $@
-    }
-
-
-    alias disk="ssh $USER-dbx -- df -h | grep /home | awk '{print $5}'"
-    function typy() {
-      # typecheck your python through dark magic [mypy]
-      cd ~/src/server;
-      ./ci/mypy-run $@;
-    }
-
-    function lint() {
-      cd ~/src/server;
-      typy;
-      arc lint;
-    }
-    
-    function selen() {
-      ss;
-      cd selenium-tests;
-      ./selenium/bin/py.test $@
-    }
-
-    function mdbset() {
-        if [[ $# -eq 0 ]]; then
-            echo "Usage: mdbset group [[-+]group2 ...]"
-            return 1
-        fi
-
-        ssh shelby mdbset $@
-    }
-
-    function msh() {
-        if [[ $# -ne 1 ]]; then
-            echo "Usage: msh group"
-            return 1
-        fi
-
-        ssh $(mdbset "$1" | head -n 1)
-    }
-
-}
 case "$HOST" in
-    *wimax-loaner*) 
-        dropboxSpecificSettings
+    *GW9LYYY*)
+        source "${WITTEKM_ZSHRC_DIR}/datadog.zshrc"
     ;;
     *) 
         # default
