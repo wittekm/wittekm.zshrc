@@ -65,7 +65,7 @@ generalAliases
 
 
 case "$HOST" in
-    *GW9LYYY*)
+    maxwittek-macbook.local*)
         source "${WITTEKM_ZSHRC_DIR}/datadog.zshrc"
     ;;
     *) 
