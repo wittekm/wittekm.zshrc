@@ -4,7 +4,10 @@ set -euo pipefail
 #set -o xtrace
 
 ghapi() {
-  gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $@
+  # does retries
+
+  gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $@ || \
+  (sleep 5 && gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $@)
 }
 
 date_cutoff="2024-09-01"
@@ -30,7 +33,7 @@ getReviews() {
 }
 
 repos=("datadog/dd-source" "datadog/dd-go" "datadog/dogweb" "datadog/web-ui" "datadog/logs-backend")
-authors=("wittekm" "vbarth2" "danielhsu93" "kevin8cao" "nkonjeti" "T-Kuo")
+authors=("wittekm" "vbarth2" "danielhsu93" "kevin8cao" "nkonjeti" "T-Kuo" "2scott2furious" "jgrillo-ddog" "ddeep2007" )
 
 # a map from author to number of PRs approved
 declare -A total_approves
@@ -95,5 +98,8 @@ done
 
 echo -e "\n\n====== total approvals ======\n\n"
 for approver in "${!total_approves[@]}"; do
-  printf "[%q]=%q\n" "$approver" "${total_approves[$approver]}"
+  # if approver is in authors
+  if [[ " ${authors[@]} " =~ " ${approver} " ]]; then
+    printf "[%q]=%q\n" "$approver" "${total_approves[$approver]}"
+  fi
 done
